@@ -11,13 +11,13 @@ interface HistoryTableProps {
 }
 
 const HistoryTable: React.FC<HistoryTableProps> = ({ history }) => {
-  const getColor = (grade: string) => {
+  const getColor = (grade: string): string => {
     if (grade === "bad") return "bg-red-200";
     if (grade === "ok") return "bg-yellow-200";
-    if (grade === "great") return "bg-green-200";
+    else return "bg-green-200";
   };
   return (
-    <div className="border border-gray-200 rounded-lg shadow-md">
+    <div className="border border-gray-200 rounded-lg shadow-md w-3/4 mx-auto">
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
           <tr>

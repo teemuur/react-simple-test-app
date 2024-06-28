@@ -1,5 +1,5 @@
-import { createStore, createEvent } from "effector";
-import data from "../data.json";
+import { createStore, createEvent } from 'effector';
+import data from '../data.json';
 
 // Функция для сохранения состояния в localStorage
 const saveToLocalStorage = (key: string, value: unknown) => {
@@ -28,17 +28,17 @@ const saveTestAttempt = createEvent<{
 }>();
 
 const $dataStore = createStore(data);
-const $userName = createStore<string>(loadFromLocalStorage("userName", ""));
+const $userName = createStore<string>(loadFromLocalStorage('userName', ''));
 const $selectedTestId = createStore<number>(
-  loadFromLocalStorage("selectedTestId", 1),
+  loadFromLocalStorage('selectedTestId', 1)
 );
 const $currentQuestionNumber = createStore<number>(
-  loadFromLocalStorage("currentQuestionNumber", 0),
+  loadFromLocalStorage('currentQuestionNumber', 0)
 );
 const $currentUserAnswer = createStore<number | null>(
-  loadFromLocalStorage("currentUserAnswer", null),
+  loadFromLocalStorage('currentUserAnswer', null)
 );
-const $points = createStore<number>(loadFromLocalStorage("points", 0));
+const $points = createStore<number>(loadFromLocalStorage('points', 0));
 const $testAttempts = createStore<
   Array<{
     userName: string;
@@ -47,12 +47,12 @@ const $testAttempts = createStore<
     time: string;
     grade: string;
   }>
->(loadFromLocalStorage("testAttempts", []));
+>(loadFromLocalStorage('testAttempts', []));
 
 $userName.on(changeUserName, (_, newValue) => newValue);
 $selectedTestId.on(changeSelectedTest, (_, newValue) => newValue);
 $currentQuestionNumber.on(changeQuestionNumber, (_, newValue) => newValue);
-$points.on(changePoints, (prev, newValue) => prev + newValue);
+$points.on(changePoints, (_, newValue) => newValue);
 $points.on(resetPoints, () => 0);
 $currentUserAnswer.on(changeCurrentUserAnswer, (_, newValue) => newValue);
 $testAttempts.on(saveTestAttempt, (state, newAttempt) => [
@@ -60,13 +60,13 @@ $testAttempts.on(saveTestAttempt, (state, newAttempt) => [
   newAttempt,
 ]);
 
-$userName.watch((state) => saveToLocalStorage("userName", state));
-$selectedTestId.watch((state) => saveToLocalStorage("selectedTestId", state));
+$userName.watch((state) => saveToLocalStorage('userName', state));
+$selectedTestId.watch((state) => saveToLocalStorage('selectedTestId', state));
 $currentQuestionNumber.watch((state) =>
-  saveToLocalStorage("currentQuestionNumber", state),
+  saveToLocalStorage('currentQuestionNumber', state)
 );
-$points.watch((state) => saveToLocalStorage("points", state));
-$testAttempts.watch((state) => saveToLocalStorage("testAttempts", state));
+$points.watch((state) => saveToLocalStorage('points', state));
+$testAttempts.watch((state) => saveToLocalStorage('testAttempts', state));
 
 export {
   changeUserName,

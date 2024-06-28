@@ -23,7 +23,7 @@ const Home: React.FC = () => {
     navigate("/question");
   };
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex items-center justify-center mt-16">
       <div className="bg-white p-10 rounded-lg shadow-md w-1/2 border border-gray">
         <form onSubmit={handleSubmit}>
           <div className="mb-6">

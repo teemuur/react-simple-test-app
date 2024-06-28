@@ -16,14 +16,6 @@ export default function Navbar() {
           <li>
             <Link
               className="px-3 py-2 text-gray-800 rounded hover:bg-gray-200"
-              to="/questionList"
-            >
-              Список тестов
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="px-3 py-2 text-gray-800 rounded hover:bg-gray-200"
               to="/result"
             >
               Результаты
