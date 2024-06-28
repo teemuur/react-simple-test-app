@@ -1,6 +1,7 @@
 import { useUnit } from 'effector-react';
 import { $testAttempts, $dataStore, $selectedTestId } from '../store/store';
 import { Link } from 'react-router-dom';
+
 import Table from '../ui/Table';
 
 const History: React.FC = () => {
@@ -9,7 +10,7 @@ const History: React.FC = () => {
     dataStore: $dataStore,
     selectedTestId: $selectedTestId,
   });
-  if (!testAttempts.length) return <div>Вы не прошли тест! 😅</div>;
+
   const lastAttempt = testAttempts[testAttempts.length - 1];
   const selectedTestObj = dataStore.find((el) => selectedTestId === el.testId);
   const selectedTestName = selectedTestObj?.testName;
@@ -18,6 +19,8 @@ const History: React.FC = () => {
       (totalPoints, question) => totalPoints + question.points,
       0
     ) ?? 0;
+
+  if (!testAttempts.length) return <div>Вы не прошли тест! 😅</div>;
 
   return (
     <>

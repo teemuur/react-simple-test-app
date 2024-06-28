@@ -34,10 +34,7 @@ const Question: React.FC = () => {
 
   const handleToNextQuestion = (): void => {
     if (currentUserAnswer === currentQuestion?.correctOption) {
-      const test = (points: number) => currentQuestion.points + points;
-      console.log(test(points));
-      changePoints(test(points));
-      changePoints(test(points));
+      changePoints(currentQuestion.points + points);
     }
     if (currentQuestionNumber + 1 < questionCount) {
       changeCurrentUserAnswer(null);

@@ -1,13 +1,12 @@
-// Компонент Home.tsx
+import { useNavigate } from 'react-router-dom';
+import { useUnit } from 'effector-react';
 import {
   $dataStore,
   changeUserName,
   changeSelectedTest,
   $userName,
   $selectedTestId,
-} from "../store/store";
-import { useUnit } from "effector-react";
-import { useNavigate } from "react-router-dom";
+} from '../store/store';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -20,8 +19,9 @@ const Home: React.FC = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    navigate("/question");
+    navigate('/question');
   };
+
   return (
     <div className="flex items-center justify-center mt-16">
       <div className="bg-white p-10 rounded-lg shadow-md w-1/2 border border-gray">

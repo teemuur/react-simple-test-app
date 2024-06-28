@@ -1,6 +1,6 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet } from 'react-router-dom';
 
-export default function Navbar() {
+const Navbar: React.FC = () => {
   return (
     <>
       <nav className="mb-5 mt-5">
@@ -26,4 +26,6 @@ export default function Navbar() {
       <Outlet />
     </>
   );
-}
+};
+
+export default Navbar;
