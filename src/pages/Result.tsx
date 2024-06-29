@@ -2,7 +2,7 @@ import { useUnit } from 'effector-react';
 import { $testAttempts, $dataStore, $selectedTestId } from '../store/store';
 import { Link } from 'react-router-dom';
 
-import Table from '../ui/Table';
+import Table from '../ui-1/Table';
 
 const History: React.FC = () => {
   const { testAttempts, dataStore, selectedTestId } = useUnit({
