@@ -75,15 +75,22 @@ const Question: React.FC = (): React.ReactElement => {
           </p>
           <div className="grid grid-cols-2 gap-5 mt-10">
             {currentQuestion?.options.map((answer, index) => (
-              <button
+              <label
                 key={`${index}-${answer}`}
-                className="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                onClick={() => changeCurrentUserAnswer(index)}
+                className="inline-flex items-center bg-indigo-100 px-4 rounded-md py-2"
               >
-                {answer}
-              </button>
+                <input
+                  type="radio"
+                  name="answer"
+                  value={index}
+                  className="form-radio text-indigo-600"
+                  onChange={() => changeCurrentUserAnswer(index)}
+                />
+                <span className="ml-2 text-black">{answer}</span>
+              </label>
             ))}
           </div>
+
           {currentUserAnswer !== null && (
             <button
               className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 w-full mt-10"

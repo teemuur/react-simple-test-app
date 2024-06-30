@@ -163,14 +163,14 @@
       "id": 1,
       "question": "Which is the most popular JavaScript framework?",
       "options": ["Angular", "React", "Svelte", "Vue"],
-      "correctOption": 1,
+      "correctOption": 0,
       "points": 10
     },
     {
       "id": 2,
       "question": "Which company invented React?",
       "options": ["Google", "Apple", "Netflix", "Facebook"],
-      "correctOption": 3,
+      "correctOption": 0,
       "points": 10
     },
     {
@@ -184,7 +184,7 @@
       "id": 4,
       "question": "What's the name of the syntax we use to describe the UI in React components?",
       "options": ["FBJ", "Babel", "JSX", "ES2015"],
-      "correctOption": 2,
+      "correctOption": 0,
       "points": 10
     },
     {
@@ -203,7 +203,7 @@
       "id": 6,
       "question": "How to pass data into a child component?",
       "options": ["State", "Props", "PropTypes", "Parameters"],
-      "correctOption": 1,
+      "correctOption": 0,
       "points": 10
     },
     {
@@ -215,7 +215,7 @@
         "Whenever the state should be accessible to all components",
         "Whenever the state can be computed from another state variable"
       ],
-      "correctOption": 3,
+      "correctOption": 0,
       "points": 30
     },
     {
@@ -227,7 +227,7 @@
         "Updating state",
         "Adding event listeners to DOM elements"
       ],
-      "correctOption": 2,
+      "correctOption": 0,
       "points": 20
     },
     {
@@ -239,7 +239,7 @@
         "When we need to add styles",
         "Almost never"
       ],
-      "correctOption": 3,
+      "correctOption": 0,
       "points": 20
     },
     {
@@ -251,7 +251,7 @@
         "When the state update should happen faster",
         "When the new state depends on the previous state"
       ],
-      "correctOption": 3,
+      "correctOption": 0,
       "points": 30
     },
     {
@@ -263,14 +263,14 @@
         "Only on the initial render",
         "The first time we update the state"
       ],
-      "correctOption": 2,
+      "correctOption": 0,
       "points": 30
     },
     {
       "id": 12,
       "question": "Which hook to use for an API request on the component's initial render?",
       "options": ["useState", "useEffect", "useRef", "useReducer"],
-      "correctOption": 1,
+      "correctOption": 0,
       "points": 10
     },
     {
@@ -282,7 +282,7 @@
         "All state and props referenced in the effect",
         "All variables needed for clean up"
       ],
-      "correctOption": 2,
+      "correctOption": 0,
       "points": 30
     },
     {
