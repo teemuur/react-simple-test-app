@@ -1,8 +1,9 @@
-import { createStore, createEvent, sample } from 'effector';
+import { createStore, createEvent, sample, combine } from 'effector';
 
 import data from '../data.json';
 
 import { ITestAttempt } from './types';
+import { getGrade } from './utils';
 
 // Функция для сохранения состояния в localStorage
 const saveToLocalStorage = (key: string, value: unknown) => {
@@ -21,10 +22,13 @@ const changeSelectedTest = createEvent<number>();
 const changeQuestionNumber = createEvent<number>();
 const changePoints = createEvent<number>();
 const changeCurrentUserAnswer = createEvent<number | null>();
-const resetPoints = createEvent();
 const saveTestAttempt = createEvent<ITestAttempt>();
-// Событие для завершения теста
 const finishTestEvent = createEvent();
+
+// Cобытия для сброса состояний
+const resetPoints = createEvent();
+const resetCurrentUserAnswer = createEvent();
+const resetCurrentQuestionNumber = createEvent();
 
 // Создание хранилищ
 const $dataStore = createStore(data);
@@ -43,6 +47,23 @@ const $testAttempts = createStore<Array<ITestAttempt>>(
   loadFromLocalStorage('testAttempts', [])
 );
 
+// Создание вычисляемых значений из состояний
+const $selectedTestObj = combine(
+  $selectedTestId,
+  $dataStore,
+  ($selectedTestId, $dataStore) => {
+    return $dataStore.find(({ testId }) => $selectedTestId === testId);
+  }
+);
+const $totalTestPoints = combine($selectedTestObj, ($selectedTestObj) => {
+  return (
+    $selectedTestObj?.questions.reduce(
+      (totalPoints, question) => totalPoints + question.points,
+      0
+    ) ?? 0
+  );
+});
+
 $userName.on(changeUserName, (_, newValue) => newValue);
 $selectedTestId.on(changeSelectedTest, (_, newValue) => newValue);
 $currentQuestionNumber.on(changeQuestionNumber, (_, newValue) => newValue);
@@ -52,8 +73,13 @@ $testAttempts.on(saveTestAttempt, (state, newAttempt) => [
   ...state,
   newAttempt,
 ]);
-$points.reset(resetPoints);
 
+//Сброс состояний до значений по умолчанию
+$points.reset(resetPoints);
+$currentQuestionNumber.reset(resetCurrentQuestionNumber);
+$currentUserAnswer.reset(resetCurrentUserAnswer);
+
+//Наблюдатели за изменением состояний
 $userName.watch((state) => saveToLocalStorage('userName', state));
 $selectedTestId.watch((state) => saveToLocalStorage('selectedTestId', state));
 $currentQuestionNumber.watch((state) =>
@@ -68,56 +94,46 @@ sample({
   source: {
     points: $points,
     userName: $userName,
-    selectedTestId: $selectedTestId,
-    $dataStore,
+    $selectedTestObj: $selectedTestObj,
+    totalTestPoints: $totalTestPoints,
   },
-  fn: ({ points, userName, selectedTestId, $dataStore }): ITestAttempt => {
+  fn: ({
+    points,
+    userName,
+    $selectedTestObj,
+    totalTestPoints,
+  }): ITestAttempt => {
     const now = new Date().toLocaleString();
-    const selectedTestObj = $dataStore.find(
-      (el) => selectedTestId === el.testId
-    );
-    const selectedTestName = selectedTestObj?.testName;
-    const totalPoints =
-      selectedTestObj?.questions.reduce(
-        (totalPoints, question) => totalPoints + question.points,
-        0
-      ) ?? 0;
+
     return {
       userName,
-      testName: selectedTestName || '',
+      testName: $selectedTestObj?.testName || '',
       points,
       time: now,
-      grade: getGrade(points, totalPoints),
+      grade: getGrade(points, totalTestPoints),
     };
   },
   target: saveTestAttempt,
 });
-
-const getGrade = (points: number, total: number): string => {
-  const percentage = points / total;
-  if (percentage < 0.5) {
-    return 'bad';
-  } else if (percentage < 0.75) {
-    return 'ok';
-  } else {
-    return 'great';
-  }
-};
 
 export {
   changeUserName,
   changeSelectedTest,
   changeQuestionNumber,
   changePoints,
-  resetPoints,
   changeCurrentUserAnswer,
   saveTestAttempt,
   finishTestEvent,
+  resetPoints,
+  resetCurrentUserAnswer,
+  resetCurrentQuestionNumber,
   $dataStore,
   $userName,
   $selectedTestId,
+  $selectedTestObj,
   $currentQuestionNumber,
   $points,
   $currentUserAnswer,
+  $totalTestPoints,
   $testAttempts,
 };

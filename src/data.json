@@ -296,18 +296,6 @@
       ],
       "correctOption": 0,
       "points": 30
-    },
-    {
-      "id": 15,
-      "question": "When will an effect run if it doesn't have a dependency array?",
-      "options": [
-        "Only when the component mounts",
-        "Only when the component unmounts",
-        "The first time the component re-renders",
-        "Each time the component is re-rendered"
-      ],
-      "correctOption": 3,
-      "points": 20
     }
   ]
 }

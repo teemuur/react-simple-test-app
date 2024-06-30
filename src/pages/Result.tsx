@@ -1,27 +1,26 @@
 import { useUnit } from 'effector-react';
 import { Link } from 'react-router-dom';
 
-import { $testAttempts, $dataStore, $selectedTestId } from '../store/store';
+import {
+  $testAttempts,
+  $selectedTestObj,
+  $totalTestPoints,
+} from '../store/store';
 
+import NoTestAttempts from './NoTestAttempts';
 import Table from '../ui/Table';
 
 const History: React.FC = (): React.ReactElement => {
-  const { testAttempts, dataStore, selectedTestId } = useUnit({
+  const { testAttempts, selectedTestObj, totalTestPoints } = useUnit({
     testAttempts: $testAttempts,
-    dataStore: $dataStore,
-    selectedTestId: $selectedTestId,
+    selectedTestObj: $selectedTestObj,
+    totalTestPoints: $totalTestPoints,
   });
 
   const lastAttempt = testAttempts[testAttempts.length - 1];
-  const selectedTestObj = dataStore.find((el) => selectedTestId === el.testId);
   const selectedTestName = selectedTestObj?.testName;
-  const maxTestPoints =
-    selectedTestObj?.questions.reduce(
-      (totalPoints, question) => totalPoints + question.points,
-      0
-    ) ?? 0;
 
-  if (!testAttempts.length) return <div>Вы не прошли тест! 😅</div>;
+  if (!testAttempts.length) return <NoTestAttempts />;
 
   return (
     <>
@@ -43,12 +42,12 @@ const History: React.FC = (): React.ReactElement => {
               <span className="font-bold">Ваши баллы:&nbsp;</span>
               <span className="text-green-600">
                 {lastAttempt.points}
-              </span> / {maxTestPoints}
+              </span> / {totalTestPoints}
             </p>
             <p className="text-lg font-semibold text-center">
               <span className="font-bold">Процент прохождения:&nbsp;</span>
               <span className="text-indigo-600">
-                {Math.round((lastAttempt.points / maxTestPoints) * 100)}%
+                {Math.round((lastAttempt.points / totalTestPoints) * 100)}%
               </span>
             </p>
           </div>

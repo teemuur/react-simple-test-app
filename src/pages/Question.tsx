@@ -3,40 +3,35 @@ import { useUnit } from 'effector-react';
 
 import {
   $currentQuestionNumber,
-  $dataStore,
-  $selectedTestId,
+  $selectedTestObj,
   $currentUserAnswer,
   $points,
   changePoints,
-  resetPoints,
   changeQuestionNumber,
   changeCurrentUserAnswer,
   finishTestEvent,
+  resetPoints,
+  resetCurrentUserAnswer,
+  resetCurrentQuestionNumber,
 } from '../store/store';
 
 const Question: React.FC = (): React.ReactElement => {
   const navigate = useNavigate();
 
-  const {
-    selectedTestId,
-    dataStore,
-    currentQuestionNumber,
-    currentUserAnswer,
-    points,
-  } = useUnit({
-    selectedTestId: $selectedTestId,
-    dataStore: $dataStore,
-    currentQuestionNumber: $currentQuestionNumber,
-    currentUserAnswer: $currentUserAnswer,
-    points: $points,
-  });
+  const { selectedTestObj, currentQuestionNumber, currentUserAnswer, points } =
+    useUnit({
+      selectedTestObj: $selectedTestObj,
+      currentQuestionNumber: $currentQuestionNumber,
+      currentUserAnswer: $currentUserAnswer,
+      points: $points,
+    });
 
   const handleToNextQuestion = (): void => {
     if (currentUserAnswer === currentQuestion?.correctOption) {
       changePoints(currentQuestion.points + points);
     }
     if (currentQuestionNumber + 1 < questionCount) {
-      changeCurrentUserAnswer(null);
+      resetCurrentUserAnswer();
       changeQuestionNumber(currentQuestionNumber + 1);
     } else {
       finishTestEvent();
@@ -46,12 +41,11 @@ const Question: React.FC = (): React.ReactElement => {
   };
 
   const resetFields = (): void => {
-    changeQuestionNumber(0);
-    changeCurrentUserAnswer(null);
+    resetCurrentQuestionNumber();
+    resetCurrentUserAnswer();
     resetPoints();
   };
 
-  const selectedTestObj = dataStore.find((el) => selectedTestId === el.testId);
   const selectedTestName = selectedTestObj?.testName;
   const questionList = selectedTestObj?.questions;
   const questionCount = questionList?.length ?? 0;
