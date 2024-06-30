@@ -94,23 +94,26 @@ sample({
   source: {
     points: $points,
     userName: $userName,
-    $selectedTestObj: $selectedTestObj,
+    selectedTestObj: $selectedTestObj,
     totalTestPoints: $totalTestPoints,
   },
   fn: ({
     points,
     userName,
-    $selectedTestObj,
+    selectedTestObj,
     totalTestPoints,
   }): ITestAttempt => {
     const now = new Date().toLocaleString();
+    const percentage = Math.round((points / totalTestPoints) * 100);
+    const grade = getGrade(points, totalTestPoints);
 
     return {
       userName,
-      testName: $selectedTestObj?.testName || '',
+      testName: selectedTestObj?.testName || '',
       points,
       time: now,
-      grade: getGrade(points, totalTestPoints),
+      grade,
+      percentage,
     };
   },
   target: saveTestAttempt,

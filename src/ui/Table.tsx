@@ -24,7 +24,7 @@ const HistoryTable: React.FC<IHistoryTableProps> = ({
               Очки
             </th>
             <th scope="col" className="px-6 py-3">
-              Время прохождения
+              Дата прохождения
             </th>
             <th scope="col" className="px-6 py-3">
               Процент прохождения
@@ -32,7 +32,7 @@ const HistoryTable: React.FC<IHistoryTableProps> = ({
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200 text-gray-500 text-sm text-center whitespace-nowrap">
-          {history.map((item, index) => (
+          {[...history].reverse().map((item, index) => (
             <tr key={`${index}_${item.userName}`}>
               <td className="px-6 py-4 font-medium text-gray-900 ">
                 {item.userName}
@@ -41,7 +41,7 @@ const HistoryTable: React.FC<IHistoryTableProps> = ({
               <td className="px-6 py-4">{item.points}</td>
               <td className="px-6 py-4">{item.time}</td>
               <td className={`${getColor(item.grade)} px-6 py-4`}>
-                {item.grade}
+                {item.percentage}
               </td>
             </tr>
           ))}

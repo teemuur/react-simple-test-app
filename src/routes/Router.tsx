@@ -9,10 +9,11 @@ import NotFound from '../pages/NotFound';
 export default function Router(): React.ReactElement {
   return (
     <Routes>
-      <Route path="/" element={<Navbar />} />
-      <Route index element={<Home />} />
-      <Route path="/result" element={<Result />} />
-      <Route path="*" element={<NotFound />} />
+      <Route path="/" element={<Navbar />}>
+        <Route index element={<Home />} />
+        <Route path="/result" element={<Result />} />
+        <Route path="*" element={<NotFound />} />
+      </Route>
       <Route path="/question" element={<Question />} />
     </Routes>
   );

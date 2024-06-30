@@ -4,4 +4,5 @@ export interface ITestAttempt {
   points: number;
   time: string;
   grade: string;
+  percentage: number;
 }
