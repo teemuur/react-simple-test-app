@@ -1,36 +1,35 @@
+import { useNavigate } from 'react-router-dom';
 import { useUnit } from 'effector-react';
+
 import {
   $currentQuestionNumber,
   $dataStore,
   $selectedTestId,
   $currentUserAnswer,
   $points,
-  $userName,
   changePoints,
   resetPoints,
   changeQuestionNumber,
   changeCurrentUserAnswer,
-  saveTestAttempt,
+  finishTestEvent,
 } from '../store/store';
-import { useNavigate } from 'react-router-dom';
 
-const Question: React.FC = () => {
+const Question: React.FC = (): React.ReactElement => {
+  const navigate = useNavigate();
+
   const {
     selectedTestId,
     dataStore,
     currentQuestionNumber,
     currentUserAnswer,
     points,
-    userName,
   } = useUnit({
     selectedTestId: $selectedTestId,
     dataStore: $dataStore,
     currentQuestionNumber: $currentQuestionNumber,
     currentUserAnswer: $currentUserAnswer,
     points: $points,
-    userName: $userName,
   });
-  const navigate = useNavigate();
 
   const handleToNextQuestion = (): void => {
     if (currentUserAnswer === currentQuestion?.correctOption) {
@@ -40,39 +39,16 @@ const Question: React.FC = () => {
       changeCurrentUserAnswer(null);
       changeQuestionNumber(currentQuestionNumber + 1);
     } else {
-      finishTest();
+      finishTestEvent();
       resetFields();
       navigate('/result');
     }
-  };
-
-  const finishTest = (): void => {
-    const now = new Date().toLocaleString();
-    saveTestAttempt({
-      userName: userName,
-      testName: selectedTestName || '',
-      points,
-      time: now,
-      grade: getGrade(points, totalPoints),
-    });
   };
 
   const resetFields = (): void => {
     changeQuestionNumber(0);
     changeCurrentUserAnswer(null);
     resetPoints();
-  };
-
-  const getGrade = (points: number, total: number): string => {
-    const percentage = points / total;
-
-    if (percentage < 0.5) {
-      return 'bad';
-    } else if (percentage < 0.75) {
-      return 'ok';
-    } else {
-      return 'great';
-    }
   };
 
   const selectedTestObj = dataStore.find((el) => selectedTestId === el.testId);
@@ -82,11 +58,6 @@ const Question: React.FC = () => {
   const currentQuestion = questionList
     ? questionList[currentQuestionNumber]
     : null;
-  const totalPoints =
-    questionList?.reduce(
-      (totalPoints, question) => totalPoints + question.points,
-      0
-    ) ?? 0;
 
   return (
     <div className="flex justify-center mt-20">

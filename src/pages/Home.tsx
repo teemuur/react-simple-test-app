@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useUnit } from 'effector-react';
+
 import {
   $dataStore,
   changeUserName,
@@ -8,7 +9,7 @@ import {
   $selectedTestId,
 } from '../store/store';
 
-const Home: React.FC = () => {
+const Home: React.FC = (): React.ReactElement => {
   const navigate = useNavigate();
 
   const { userName, tests, selectedTestId } = useUnit({
@@ -17,7 +18,7 @@ const Home: React.FC = () => {
     selectedTestId: $selectedTestId,
   });
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
     navigate('/question');
   };
@@ -31,7 +32,7 @@ const Home: React.FC = () => {
               Выберите тест:
             </label>
             <select
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="bg-white  text-gray-900 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               value={selectedTestId}
               onChange={(event) =>
                 changeSelectedTest(Number(event.target.value))

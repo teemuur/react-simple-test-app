@@ -1,6 +1,6 @@
-import Router from "./routes/Router";
+import Router from './routes/Router';
 
-export default function App() {
+export default function App(): React.ReactElement {
   return (
     <div className="container mx-auto">
       <Router />

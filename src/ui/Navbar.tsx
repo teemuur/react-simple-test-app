@@ -1,6 +1,6 @@
 import { Link, Outlet } from 'react-router-dom';
 
-const Navbar: React.FC = () => {
+const Navbar: React.FC = (): React.ReactElement => {
   return (
     <>
       <nav className="mb-5 mt-5">

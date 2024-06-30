@@ -1,4 +1,5 @@
-import { createStore, createEvent } from 'effector';
+import { createStore, createEvent, sample } from 'effector';
+
 import data from '../data.json';
 
 // Функция для сохранения состояния в localStorage
@@ -27,6 +28,10 @@ const saveTestAttempt = createEvent<{
   grade: string;
 }>();
 
+// Событие для завершения теста
+const finishTestEvent = createEvent();
+
+// Создание хранилищ
 const $dataStore = createStore(data);
 const $userName = createStore<string>(loadFromLocalStorage('userName', ''));
 const $selectedTestId = createStore<number>(
@@ -53,12 +58,12 @@ $userName.on(changeUserName, (_, newValue) => newValue);
 $selectedTestId.on(changeSelectedTest, (_, newValue) => newValue);
 $currentQuestionNumber.on(changeQuestionNumber, (_, newValue) => newValue);
 $points.on(changePoints, (_, newValue) => newValue);
-$points.on(resetPoints, () => 0);
 $currentUserAnswer.on(changeCurrentUserAnswer, (_, newValue) => newValue);
 $testAttempts.on(saveTestAttempt, (state, newAttempt) => [
   ...state,
   newAttempt,
 ]);
+$points.reset(resetPoints);
 
 $userName.watch((state) => saveToLocalStorage('userName', state));
 $selectedTestId.watch((state) => saveToLocalStorage('selectedTestId', state));
@@ -68,6 +73,48 @@ $currentQuestionNumber.watch((state) =>
 $points.watch((state) => saveToLocalStorage('points', state));
 $testAttempts.watch((state) => saveToLocalStorage('testAttempts', state));
 
+// Логика для завершения теста
+sample({
+  clock: finishTestEvent,
+  source: {
+    points: $points,
+    userName: $userName,
+    selectedTestId: $selectedTestId,
+    $dataStore,
+  },
+  fn: ({ points, userName, selectedTestId, $dataStore }) => {
+    const now = new Date().toLocaleString();
+    const selectedTestObj = $dataStore.find(
+      (el) => selectedTestId === el.testId
+    );
+    const selectedTestName = selectedTestObj?.testName;
+    const totalPoints =
+      selectedTestObj?.questions.reduce(
+        (totalPoints, question) => totalPoints + question.points,
+        0
+      ) ?? 0;
+    return {
+      userName,
+      testName: selectedTestName || '',
+      points,
+      time: now,
+      grade: getGrade(points, totalPoints),
+    };
+  },
+  target: saveTestAttempt,
+});
+
+const getGrade = (points: number, total: number): string => {
+  const percentage = points / total;
+  if (percentage < 0.5) {
+    return 'bad';
+  } else if (percentage < 0.75) {
+    return 'ok';
+  } else {
+    return 'great';
+  }
+};
+
 export {
   changeUserName,
   changeSelectedTest,
@@ -76,6 +123,7 @@ export {
   resetPoints,
   changeCurrentUserAnswer,
   saveTestAttempt,
+  finishTestEvent,
   $dataStore,
   $userName,
   $selectedTestId,
