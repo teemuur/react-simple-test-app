@@ -1,16 +1,6 @@
-interface HistoryItem {
-  userName: string;
-  testName: string;
-  points: number;
-  time: string;
-  grade: string;
-}
+import { IHistoryTableProps } from './types';
 
-interface HistoryTableProps {
-  history: HistoryItem[];
-}
-
-const HistoryTable: React.FC<HistoryTableProps> = ({
+const HistoryTable: React.FC<IHistoryTableProps> = ({
   history,
 }): React.ReactElement => {
   const getColor = (grade: string): string => {

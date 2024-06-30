@@ -2,6 +2,8 @@ import { createStore, createEvent, sample } from 'effector';
 
 import data from '../data.json';
 
+import { ITestAttempt } from './types';
+
 // Функция для сохранения состояния в localStorage
 const saveToLocalStorage = (key: string, value: unknown) => {
   localStorage.setItem(key, JSON.stringify(value));
@@ -20,14 +22,7 @@ const changeQuestionNumber = createEvent<number>();
 const changePoints = createEvent<number>();
 const changeCurrentUserAnswer = createEvent<number | null>();
 const resetPoints = createEvent();
-const saveTestAttempt = createEvent<{
-  userName: string;
-  testName: string;
-  points: number;
-  time: string;
-  grade: string;
-}>();
-
+const saveTestAttempt = createEvent<ITestAttempt>();
 // Событие для завершения теста
 const finishTestEvent = createEvent();
 
@@ -44,15 +39,9 @@ const $currentUserAnswer = createStore<number | null>(
   loadFromLocalStorage('currentUserAnswer', null)
 );
 const $points = createStore<number>(loadFromLocalStorage('points', 0));
-const $testAttempts = createStore<
-  Array<{
-    userName: string;
-    testName: string;
-    points: number;
-    time: string;
-    grade: string;
-  }>
->(loadFromLocalStorage('testAttempts', []));
+const $testAttempts = createStore<Array<ITestAttempt>>(
+  loadFromLocalStorage('testAttempts', [])
+);
 
 $userName.on(changeUserName, (_, newValue) => newValue);
 $selectedTestId.on(changeSelectedTest, (_, newValue) => newValue);
@@ -82,7 +71,7 @@ sample({
     selectedTestId: $selectedTestId,
     $dataStore,
   },
-  fn: ({ points, userName, selectedTestId, $dataStore }) => {
+  fn: ({ points, userName, selectedTestId, $dataStore }): ITestAttempt => {
     const now = new Date().toLocaleString();
     const selectedTestObj = $dataStore.find(
       (el) => selectedTestId === el.testId
